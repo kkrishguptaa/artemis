@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-*: initial;
+
+  --color-black: #121212;
+  --color-white: #FFFFFF;
+
+  --font-body: var(--font-mona-sans), var(--font-sans), sans-serif;
+  --font-code: var(--font-fira-code), var(--font-mono), sans-serif;
+}
