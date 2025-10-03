@@ -1,0 +1,30 @@
+---
+import Sidebar from "~components/Sidebar.astro";
+import RootLayout from "./RootLayout.astro";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  project: CollectionEntry<"projects">;
+  devlogs: CollectionEntry<"devlogs">[];
+}
+
+const { project, devlogs } = Astro.props;
+---
+
+<RootLayout head={{}}>
+  <main class="flex h-screen">
+    <Sidebar
+      header={{
+        title: project.data.name,
+        href: new URL(project.id, Astro.site).toString(),
+      }}
+      items={devlogs.map((log) => ({
+        text: log.data.title,
+        href: new URL(log.id, Astro.site).toString(),
+      }))}
+    />
+    <article class="flex-1 overflow-y-auto p-8">
+      <slot />
+    </article>
+  </main>
+</RootLayout>

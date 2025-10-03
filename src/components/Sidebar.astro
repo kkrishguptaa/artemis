@@ -1,5 +1,178 @@
 ---
 export interface Props {
-  items: { title: string; href: string }[];
+  header: {
+    title: string;
+    href: string;
+  };
+  items: Array<{
+    text: string;
+    href: string;
+    external?: boolean;
+  }>;
 }
+
+const { header, items } = Astro.props;
 ---
+
+<button
+  id="menu-button"
+  class="md:hidden fixed top-4 right-4 z-50 p-2 bg-black/2.5 dark:bg-white/2.5 backdrop-blur-sm rounded-md"
+>
+  <svg
+    id="menu-icon"
+    class="w-6 h-6"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M4 6h16M4 12h16M4 18h16"></path>
+  </svg>
+  <svg
+    id="close-icon"
+    class="w-6 h-6 hidden"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M6 18L18 6M6 6l12 12"></path>
+  </svg>
+</button>
+
+<aside
+  id="sidebar"
+  class:list={[
+    "w-64 h-screen",
+    "bg-black/2.5 dark:bg-white/2.5 backdrop-blur-sm",
+    "flex flex-col",
+    "md:relative md:translate-x-0",
+    "fixed top-0 left-0 z-40 -translate-x-full md:block",
+    "transition-transform duration-300 md:transition-none",
+  ]}
+>
+  <header class="p-6 bg-black/2.5 dark:bg-white/2.5 flex-shrink-0">
+    <a
+      href={header.href}
+      class="text-xl font-bold text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+      title={header.title}
+    >
+      /{header.title.toLowerCase().replace(/\s+/g, "-")}/
+    </a>
+  </header>
+
+  <nav class="flex-1 h-[80vh] overflow-y-auto">
+    <ul>
+      {
+        items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              target={item.external ? "_blank" : undefined}
+              class="block hover:bg-black/5 hover:dark:bg-white/5 hover:underline underline-offset-4 px-6 py-4 transition-colors"
+              title={item.text}
+            >
+              {item.text.toLocaleLowerCase().replace(/\s+/g, "-")}.md
+            </a>
+          </li>
+        ))
+      }
+      {
+        items.length === 0 && (
+          <li class="px-6 py-4">
+            It seems like Krish still hasn't written devlogs for this project.
+            Bug him on{" "}
+            <a
+              href="https://twitter.com/kkrishguptaa"
+              class="underline underline-offset-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Twitter.
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </nav>
+
+  <div class="p-6 bg-black/2.5 dark:bg-white/2.5 flex-shrink-0">
+    <a
+      href={new URL("/", Astro.site).toString()}
+      class="block w-full py-2 px-4 bg-black/2.5 dark:bg-white/2.5 text-gray-900 dark:text-white rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+      title="Home"
+    >
+      cd /home/devlogs
+    </a>
+  </div>
+</aside>
+
+<div
+  id="mobile-overlay"
+  class="md:hidden fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300"
+>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("menu-button");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("mobile-overlay");
+    const menuIcon = document.getElementById("menu-icon");
+    const closeIcon = document.getElementById("close-icon");
+
+    if (!button || !sidebar || !overlay) return;
+
+    let mobileMenuOpen = false;
+
+    const openSidebar = () => {
+      mobileMenuOpen = true;
+      sidebar.classList.remove("-translate-x-full");
+      sidebar.classList.add("translate-x-0");
+      overlay.classList.remove("opacity-0", "pointer-events-none");
+      overlay.classList.add("opacity-100");
+
+      if (menuIcon && closeIcon) {
+        menuIcon.style.display = "none";
+        closeIcon.style.display = "block";
+      }
+    };
+
+    const closeSidebar = () => {
+      mobileMenuOpen = false;
+      sidebar.classList.remove("translate-x-0");
+      sidebar.classList.add("-translate-x-full");
+      overlay.classList.remove("opacity-100");
+      overlay.classList.add("opacity-0", "pointer-events-none");
+
+      if (menuIcon && closeIcon) {
+        menuIcon.style.display = "block";
+        closeIcon.style.display = "none";
+      }
+    };
+
+    button.addEventListener("click", () => {
+      if (mobileMenuOpen) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    });
+
+    // Close sidebar when clicking overlay
+    overlay.addEventListener("click", closeSidebar);
+
+    // Close sidebar when pressing Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        closeSidebar();
+      }
+    });
+  });
+</script>
