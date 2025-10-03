@@ -1,5 +1,75 @@
 ---
+import { getCollection } from "astro:content";
 import RootLayout from "~layouts/RootLayout.astro";
+import FolderIcon from "~assets/folder.webp";
+import { Image } from "astro:assets";
+
+const projects = await getCollection("projects");
 ---
 
-<RootLayout />
+<RootLayout>
+  <main class="container py-20 mx-auto">
+    <header class="text-center p-8 border-b border-white/20">
+      <h1 class="text-4xl font-bold my-4">Devlogs</h1>
+      <p class="max-w-prose mx-auto my-2">
+        This is the place where <a
+          href="https://krishg.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline underline-offset-4">Krish</a
+        > documents his development process! This serves to be a guide for when he
+        inevitably forgets how he built something.
+      </p>
+    </header>
+    <nav class="my-8">
+      <ul
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+      >
+        {
+          projects.map((project) => (
+            <li>
+              <a
+                href={new URL(project.id, Astro.site).toString()}
+                class="group flex items-center justify-center gap-1 flex-col p-3 cursor-pointer"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={FolderIcon}
+                  alt="Folder Icon"
+                  densities={[0.5, 1, 2]}
+                  height={64}
+                  width={64}
+                  class="group-hover:scale-105 transition-transform duration-200"
+                />
+                <h2 class="group-hover:underline">{project.data.name}</h2>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <footer class="py-8 border-t border-white/20">
+      <nav class="my-4">
+        <ul class="flex flex-wrap gap-4 w-full items-center justify-evenly">
+          <li>
+            <a
+              href="https://krishg.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline underline-offset-4">Krish's Website</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://blog.krishg.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline underline-offset-4">Krish's Blog</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </main>
+</RootLayout>

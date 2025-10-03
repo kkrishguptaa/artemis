@@ -2,31 +2,42 @@ import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const projects = defineCollection({
-  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
+  loader: glob({ base: './src/content/projects', pattern: ['**/*.{md,yaml}'] }),
 
-  schema: ({ image }) =>
+  schema: () =>
     z.object({
-      title: z.string(),
+      name: z.string(),
       description: z.string(),
-      cover: image(),
 
-      link: z.string().url().optional(),
-      repo: z.string().url().optional(),
-    }),
+      website: z.nullable(z.string().url()),
+
+      git: z.string().transform(value => {
+        const [name, host] = value.split(':').reverse()
+        // biome-ignore lint/style/noNonNullAssertion: <when the split value is reverse, host can never be null, because the first value will always be something!>
+        const [repo, owner] = name!.split('/').reverse()
+
+        return {
+          host: host ? `https://${host}.com` : 'https://github.com',
+          owner: owner ?? 'kkrishguptaa',
+          // biome-ignore lint/style/noNonNullAssertion: <same as above>
+          repo: repo!
+        }
+      })
+    })
 });
 
 const devlogs = defineCollection({
-  loader: glob({ base: './src/content/devlogs', pattern: '**/*.{md,mdx}' }),
+  loader: glob({ base: './src/content/devlogs', pattern: '**/*.{md}' }),
 
-  schema: ({ image }) =>
+  schema: () =>
     z.object({
       title: z.string(),
       description: z.string(),
-      date: z.coerce.date(),
 
-      cover: image(),
-      project: reference('projects'),
+      date: z.coerce.date(),
       draft: z.boolean().default(false),
+
+      project: reference('projects'),
     }),
 });
 
