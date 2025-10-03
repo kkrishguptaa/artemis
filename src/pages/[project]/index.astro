@@ -1,4 +1,5 @@
 ---
+import { render } from "astro:content";
 import { getCollection } from "astro:content";
 import ProjectLayout from "~layouts/ProjectLayout.astro";
 
@@ -17,6 +18,83 @@ const devlogs = await getCollection(
   "devlogs",
   (log) => log.data.project.id === project.id
 );
+
+const { Content } = await render(project);
 ---
 
-<ProjectLayout project={project} devlogs={devlogs}>Hi</ProjectLayout>
+<ProjectLayout project={project} devlogs={devlogs}>
+  <h1>{project.data.name}</h1>
+  <p>
+    {project.data.description}
+  </p>
+  <p class="flex gap-2">
+    {
+      project.data.website && (
+        <a
+          href={project.data.website}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>Website</span>
+        </a>
+      )
+    }
+    {project.data.website && <span>•</span>}
+    <a
+      href={new URL(
+        project.data.git.owner + "/" + project.data.git.repo,
+        project.data.git.host
+      )}
+      class="underline underline-offset-4"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span>Source</span>
+    </a>
+  </p>
+  <hr />
+
+  {devlogs.length > 0 && <h2>Devlogs</h2>}
+  {
+    devlogs.length > 0 ? (
+      <ul class="pl-0 space-y-0.5">
+        {devlogs.map((log) => (
+          <li class="flex items-baseline pl-0 gap-4 flex-wrap">
+            <a
+              href={new URL(
+                project.id + "/" + log.id.split("/").pop()!,
+                Astro.site
+              ).toString()}
+              class="underline underline-offset-4"
+            >
+              {log.data.title}
+            </a>
+            <span class="flex-1 text-right text-sm text-black/70 dark:text-white/70">
+              {new Date(log.data.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>
+        It seems like Krish still hasn't written devlogs for this project. Bug
+        him on{" "}
+        <a
+          href="https://twitter.com/kkrishguptaa"
+          class="underline underline-offset-4"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Twitter.
+        </a>
+      </p>
+    )
+  }
+  <hr />
+  {project.body && <h2>About this project</h2>}
+  {project.body && <Content />}
+</ProjectLayout>

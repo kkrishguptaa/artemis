@@ -8,6 +8,7 @@ export interface Props {
     text: string;
     href: string;
     external?: boolean;
+    active?: boolean;
   }>;
 }
 
@@ -75,7 +76,7 @@ const { header, items } = Astro.props;
             <a
               href={item.href}
               target={item.external ? "_blank" : undefined}
-              class="block hover:bg-black/5 hover:dark:bg-white/5 hover:underline underline-offset-4 px-6 py-4 transition-colors"
+              class={`block hover:bg-black/5 hover:dark:bg-white/5 hover:underline underline-offset-4 px-6 py-4 transition-colors ${item.active ? "bg-black/5 dark:bg-white/5 font-semibold" : "font-normal"}`}
               title={item.text}
             >
               {item.text.toLocaleLowerCase().replace(/\s+/g, "-")}.md

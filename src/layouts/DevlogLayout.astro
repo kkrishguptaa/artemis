@@ -2,13 +2,17 @@
 import Sidebar from "~components/Sidebar.astro";
 import RootLayout from "./RootLayout.astro";
 import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
 
 export interface Props {
   project: CollectionEntry<"projects">;
   devlogs: CollectionEntry<"devlogs">[];
+  devlog: CollectionEntry<"devlogs">;
 }
 
-const { project, devlogs } = Astro.props;
+const { project, devlogs, devlog } = Astro.props;
+
+const { Content } = await render(devlog);
 ---
 
 <RootLayout head={{}}>
@@ -24,12 +28,15 @@ const { project, devlogs } = Astro.props;
           project.id + "/" + log.id.split("/").pop()!,
           Astro.site
         ).toString(),
+        active: log.id === devlog.id,
       }))}
     />
     <article
       class="flex-1 overflow-y-auto p-8 prose dark:prose-invert prose-hr:border-black/20 dark:prose-hr:border-white/20 prose-a:underline prose-a:underline-offset-4 mx-auto"
     >
-      <slot />
+      <h1>{devlog.data.title}</h1>
+      <hr class="mt-1 mb-4" />
+      <Content />
     </article>
   </main>
 </RootLayout>
