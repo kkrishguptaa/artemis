@@ -4,7 +4,25 @@ import RootLayout from "~layouts/RootLayout.astro";
 import FolderIcon from "~assets/folder.webp";
 import { Image } from "astro:assets";
 
-const projects = await getCollection("projects");
+const projectsRaw = await getCollection("projects");
+const devlogs = await getCollection("devlogs");
+
+const latestDates = new Map();
+
+for (const log of devlogs) {
+  const currentLatest = latestDates.get(log.data.project.id);
+
+  if (!currentLatest || log.data.date > currentLatest) {
+    latestDates.set(log.data.project.id, log.data.date);
+  }
+}
+
+const projects = projectsRaw.sort((a, b) => {
+  const dateA = latestDates.get(a.id) ?? -Infinity;
+  const dateB = latestDates.get(b.id) ?? -Infinity;
+
+  return dateB - dateA;
+});
 ---
 
 <RootLayout>
