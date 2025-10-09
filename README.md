@@ -30,13 +30,13 @@ This website is hosted on Vercel. If you want to deploy it yourself, you can use
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/kkrishguptaa/orpheus.git
+   git clone https://github.com/kkrishguptaa/artemis.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd orpheus
+   cd artemis
    ```
 
 3. Install dependencies:
