@@ -1,43 +1,56 @@
-# Astro Starter Kit: Minimal
+# Artemis
 
-```sh
-pnpm create astro@latest -- --template minimal
-```
+Simple website to store Devlogs to not forget the development process.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+[![A screenshot of the Orpheus Website](https://github.com/kkrishguptaa/artemis/raw/main/.github/screenshot.png)](https://devlogs.krishg.com)
 
-## 🚀 Project Structure
+## 👋 Introduction
 
-Inside of your Astro project, you'll see the following folders and files:
+## 📦 Tech Stack
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- [Astro](https://astro.build/) - Static site generator.
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework.
+- [Vercel](https://vercel.com/) - Hosting platform.
+- [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Astro
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+The premise is simple, static site generation, content collections and markdown support. Astro is perfect for this use case.
 
-Any static assets, like images, can be placed in the `public/` directory.
+### Vercel
 
-## 🧞 Commands
+This website is hosted on Vercel. If you want to deploy it yourself, you can use this handy button:
 
-All commands are run from the root of the project, from a terminal:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fkkrishguptaa%2Fartemis&project-name=artemis&repository-name=artemis&demo-title=Artemis&demo-description=Simple%20website%20to%20store%20Devlogs%20to%20not%20forget%20the%20development%20process.&demo-url=https%3A%2F%2Fdevlogs.krishg.com&demo-image=https%3A%2F%2Fgithub.com%2Fkkrishguptaa%2Fartemis%2Fraw%2Fmain%2F.github%2Fscreenshot.png)
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+## ✌️ Deployment
 
-## 👀 Want to learn more?
+### Running Locally
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/kkrishguptaa/orpheus.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd orpheus
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+4. Run the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+## 📜 License
+
+This source code for this project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute it as per the terms of the license. However, the devlogs showcased on the website are my original work and are protected under copyright law. Please do not use or reproduce them without my permission.

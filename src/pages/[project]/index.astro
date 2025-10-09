@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import { getCollection } from "astro:content";
+import Bugger from "~components/Bugger.astro";
 import ProjectLayout from "~layouts/ProjectLayout.astro";
 
 export async function getStaticPaths() {
@@ -81,16 +82,7 @@ const { Content } = await render(project);
       </ul>
     ) : (
       <p>
-        It seems like Krish still hasn't written devlogs for this project. Bug
-        him on{" "}
-        <a
-          href="https://twitter.com/kkrishguptaa"
-          class="underline underline-offset-4"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Twitter.
-        </a>
+        <Bugger />
       </p>
     )
   }

@@ -31,12 +31,14 @@ const { Content } = await render(devlog);
         active: log.id === devlog.id,
       }))}
     />
-    <article
-      class="flex-1 overflow-y-auto p-8 prose dark:prose-invert prose-hr:border-black/20 dark:prose-hr:border-white/20 prose-a:underline prose-a:underline-offset-4 mx-auto"
-    >
-      <h1>{devlog.data.title}</h1>
-      <hr class="mt-1 mb-4" />
-      <Content />
-    </article>
+    <div class="w-full h-screen overflow-scroll">
+      <article
+        class="flex-1 overflow-y-auto p-8 prose dark:prose-invert prose-hr:border-black/20 dark:prose-hr:border-white/20 prose-a:underline prose-a:underline-offset-4 mx-auto"
+      >
+        <h1>{devlog.data.title}</h1>
+        <hr class="mt-1 mb-4" />
+        <Content />
+      </article>
+    </div>
   </main>
 </RootLayout>
