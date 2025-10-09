@@ -26,10 +26,12 @@ const { project, devlogs } = Astro.props;
         ).toString(),
       }))}
     />
-    <article
-      class="flex-1 overflow-y-auto p-8 prose dark:prose-invert prose-hr:border-black/20 dark:prose-hr:border-white/20 prose-a:underline prose-a:underline-offset-4 mx-auto"
-    >
-      <slot />
-    </article>
+    <div class="w-full h-screen overflow-scroll">
+      <article
+        class="flex-1 overflow-y-auto p-8 prose dark:prose-invert prose-hr:border-black/20 dark:prose-hr:border-white/20 prose-a:underline prose-a:underline-offset-4 mx-auto"
+      >
+        <slot />
+      </article>
+    </div>
   </main>
 </RootLayout>

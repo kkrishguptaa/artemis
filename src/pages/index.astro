@@ -3,11 +3,13 @@ import { getCollection } from "astro:content";
 import RootLayout from "~layouts/RootLayout.astro";
 import FolderIcon from "~assets/folder.webp";
 import { Image } from "astro:assets";
+import Bugger from "~components/Bugger.astro";
 
 const projectsRaw = await getCollection("projects");
 const devlogs = await getCollection("devlogs");
 
 const latestDates = new Map();
+const numberOfDevlogs = new Map();
 
 for (const log of devlogs) {
   const currentLatest = latestDates.get(log.data.project.id);
@@ -15,14 +17,21 @@ for (const log of devlogs) {
   if (!currentLatest || log.data.date > currentLatest) {
     latestDates.set(log.data.project.id, log.data.date);
   }
+
+  numberOfDevlogs.set(
+    log.data.project.id,
+    (numberOfDevlogs.get(log.data.project.id) ?? 0) + 1
+  );
 }
 
-const projects = projectsRaw.sort((a, b) => {
-  const dateA = latestDates.get(a.id) ?? -Infinity;
-  const dateB = latestDates.get(b.id) ?? -Infinity;
+const projects = projectsRaw
+  .sort((a, b) => {
+    const dateA = latestDates.get(a.id) ?? -Infinity;
+    const dateB = latestDates.get(b.id) ?? -Infinity;
 
-  return dateB - dateA;
-});
+    return dateB - dateA;
+  })
+  .filter((project) => numberOfDevlogs.has(project.id));
 ---
 
 <RootLayout>
@@ -40,54 +49,63 @@ const projects = projectsRaw.sort((a, b) => {
       </p>
     </header>
     <nav class="my-8">
-      <ul
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
-      >
-        {
-          projects.map((project) => (
-            <li>
-              <a
-                href={new URL(project.id, Astro.site).toString()}
-                class="group flex items-center justify-center gap-1 flex-col p-3 cursor-pointer"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src={FolderIcon}
-                  alt="Folder Icon"
-                  densities={[0.5, 1, 2]}
-                  height={64}
-                  width={64}
-                  class="group-hover:scale-105 transition-transform duration-200"
-                />
-                <h2 class="group-hover:underline">{project.data.name}</h2>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <footer class="py-8 border-t border-white/20">
-      <nav class="my-4">
-        <ul class="flex flex-wrap gap-4 w-full items-center justify-evenly">
-          <li>
-            <a
-              href="https://krishg.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="underline underline-offset-4">Krish's Website</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://blog.krishg.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="underline underline-offset-4">Krish's Blog</a
-            >
-          </li>
+      <nav class="my-8">
+        <ul
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+        >
+          {
+            projects.map((project) => (
+              <li>
+                <a
+                  href={new URL(project.id, Astro.site).toString()}
+                  class="group flex items-center justify-center gap-1 flex-col p-3 cursor-pointer"
+                >
+                  <Image
+                    src={FolderIcon}
+                    alt="Folder Icon"
+                    densities={[0.5, 1, 2]}
+                    height={64}
+                    width={64}
+                    class="group-hover:scale-105 transition-transform duration-200"
+                  />
+                  <h2 class="group-hover:underline">
+                    {project.data.name} ({numberOfDevlogs.get(project.id) ?? 0})
+                  </h2>
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </nav>
-    </footer>
+      {
+        projects.length === 0 && (
+          <p class="text-center mb-16">
+            <Bugger />
+          </p>
+        )
+      }
+      <footer class="py-8 border-t border-white/20">
+        <nav class="my-4">
+          <ul class="flex flex-wrap gap-4 w-full items-center justify-evenly">
+            <li>
+              <a
+                href="https://krishg.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline underline-offset-4">Krish's Website</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://blog.krishg.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline underline-offset-4">Krish's Blog</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </footer>
+    </nav>
   </main>
 </RootLayout>
